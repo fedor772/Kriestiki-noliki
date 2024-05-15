@@ -1,5 +1,6 @@
 import java.util.Scanner;
 public class Main {
+  public static char nf = '□';
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     int a;
@@ -8,9 +9,9 @@ public class Main {
     int secondDgt;
     boolean isX = true;
     char[][] zone = {
-      {'□', '□', '□'}, 
-      {'□', '□', '□'}, 
-      {'□', '□', '□'}
+      {nf, nf, nf}, 
+      {nf, nf, nf}, 
+      {nf, nf, nf}
     };
     //Основной цикл
     while (true) {
@@ -21,20 +22,18 @@ public class Main {
       System.out.print("\u001B[37m");
       a = sc.nextInt();
       firstDgt = parsePut(a)[0];
-      secondDgt = parsePut(a)[1];
-      /* System.out.println(firstDgt);
-      System.out.println(secondDgt); */ 
+      secondDgt = parsePut(a)[1]; 
       //Проверка на свободность клетки
-      if (zone[firstDgt - 1][secondDgt - 1] == '□') {
-        if (isX) {
-      zone[secondDgt - 1][firstDgt - 1] = 'x';
+        if (zone[firstDgt - 1][secondDgt - 1] != nf) {
+            System.out.println("Эта клетка уже занята");
+          wait(1000);
         } else {
-          zone[secondDgt - 1][firstDgt - 1] = 'o';
+            if (isX) {
+                zone[secondDgt - 1][firstDgt - 1] = 'x';
+            } else {
+                zone[secondDgt - 1][firstDgt - 1] = 'o';
+            }
         }
-      } else {
-        System.out.println("Эта клетка уже занята");
-        wait(1000);
-      }
       //Проверка на победу
       if (isWin(zone)) {
         System.out.println(isX ? "Победили крестики" : "Победили нолики");
@@ -59,31 +58,18 @@ public class Main {
     }
   }
   public static int[] parsePut (int put) {
-    int[] parsed = { 
-     firstDigit(put), 
-     secondDigit(put)
-    };
+    int[] parsed = { put / 10, put % 10 };
     return parsed;
   }
-  //firstDigit и secondDigit это функции для получения первой и второй цифры из ввода пользователя и преобразования их в индексы массива
-  public static int firstDigit(int fd) {
-    while (fd > 9) {
-        fd /= 10;
-    }
-    return fd;
-  }
-public static int secondDigit(int sd) {
-    return Integer.parseInt(Integer.toString(sd).substring(1, 2));
-}
   //Функция для проверки на победу
   public static boolean isWin(char[][] z) {
     boolean win = false;
     for (int i = 0; i < 3; i++) {
-    if (z[i][0] == z[i][1] && z[i][1] == z[i][2] && z[i][0] != '□') {
+    if (z[i][0] == z[i][1] && z[i][1] == z[i][2] && z[i][0] != nf) {
       win = true;
-    } else if (z[0][i] == z[1][i] && z[1][i] == z[2][i] && z[0][i] != '□') {
+    } else if (z[0][i] == z[1][i] && z[1][i] == z[2][i] && z[0][i] != nf) {
       win = true;
-    } else if ((z[0][0] == z[1][1] && z[1][1] == z[2][2] && z[0][0] != '□') || (z[0][2] == z[1][1] && z[1][1] == z[2][0] && z[0][2] != '□')) {
+    } else if ((z[0][0] == z[1][1] && z[1][1] == z[2][2] && z[0][0] != nf) || (z[0][2] == z[1][1] && z[1][1] == z[2][0] && z[0][2] != nf)) {
       win = true;
     } else {
       win = false;
@@ -100,6 +86,6 @@ public static int secondDigit(int sd) {
   }
   //Функция проверки на ничью
   public static boolean isNoWin(char[][] p) {
-    return p[0][0] != '□' && p[0][1] != '□' && p[0][2] != '□' && p[1][0] != '□' && p[1][1] != '□' && p[1][2] != '□' && p[2][0] != '□' && p[2][1] != '□' && p[2][2] != '□';
+    return p[0][0] != nf && p[0][1] != nf && p[0][2] != nf && p[1][0] != nf && p[1][1] != nf && p[1][2] != nf && p[2][0] != nf && p[2][1] != nf && p[2][2] != nf;
   }
 }
